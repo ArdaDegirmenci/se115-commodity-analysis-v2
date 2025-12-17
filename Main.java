@@ -1,4 +1,3 @@
-// Main.java — Students version
 import java.io.*;
 import java.util.*;
 
@@ -82,18 +81,19 @@ public class Main {
 
     public static int commodityProfitInRange(String commodity, int from, int to) {
         int cIndex = getCommodityIndex(commodity);
-        if (cIndex == -1 || fromDay < 1 || toDay > DAYS || fromDay > toDay) return -99999;
+        if (cIndex == -1 || from < 1 || to > DAYS || from > to) return -99999;
 
         int sum = 0;
         for (int m = 0; m < MONTHS; m++) {
-            int start = m * DAYS + (fromDay - 1);
-            int end = m * DAYS + (toDay - 1);
+            int start = m * DAYS + (from - 1);
+            int end = m * DAYS + (to - 1);
             for (int g = start; g <= end; g++) {
                 sum += profits[g][cIndex];
             }
         }
         return sum;
     }
+
 
     public static int bestDayOfMonth(int month) {
         if (month < 0 || month >= MONTHS) return -1;
@@ -116,7 +116,7 @@ public class Main {
     }
 
     public static String bestMonthForCommodity(String comm) {
-        int cIndex = getCommodityIndex(commodity);
+        int cIndex = getCommodityIndex(comm);
         if (cIndex == -1) return "INVALID_COMMODITY";
 
         int bestMonth = 0;
@@ -137,7 +137,7 @@ public class Main {
     }
 
     public static int consecutiveLossDays(String comm) {
-        int cIndex = getCommodityIndex(commodity);
+        int cIndex = getCommodityIndex(comm);
         if (cIndex == -1) return -1;
 
         int maxStreak = 0;
@@ -155,7 +155,7 @@ public class Main {
     }
 
     public static int daysAboveThreshold(String comm, int threshold) {
-        int cIndex = getCommodityIndex(commodity);
+        int cIndex = getCommodityIndex(comm);
         if (cIndex == -1) return -1;
 
         int count = 0;
