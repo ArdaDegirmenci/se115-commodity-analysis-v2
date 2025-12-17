@@ -137,23 +137,94 @@ public class Main {
     }
 
     public static int consecutiveLossDays(String comm) {
-        return 1234;
+        int cIndex = getCommodityIndex(commodity);
+        if (cIndex == -1) return -1;
+
+        int maxStreak = 0;
+        int current = 0;
+
+        for (int g = 0; g < MONTHS * DAYS; g++) {
+            if (profits[g][cIndex] < 0) {
+                current++;
+                if (current > maxStreak) maxStreak = current;
+            } else {
+                current = 0;
+            }
+        }
+        return maxStreak;
     }
 
     public static int daysAboveThreshold(String comm, int threshold) {
-        return 1234;
+        int cIndex = getCommodityIndex(commodity);
+        if (cIndex == -1) return -1;
+
+        int count = 0;
+        for (int g = 0; g < MONTHS * DAYS; g++) {
+            if (profits[g][cIndex] > threshold) count++;
+        }
+        return count;
     }
 
     public static int biggestDailySwing(int month) {
-        return 1234;
+        if (month < 0 || month >= MONTHS) return -99999;
+
+        int start = month * DAYS;
+
+        int prev = 0;
+        for (int c = 0; c < COMMS; c++) {
+            prev += profits[start][c];
+        }
+
+        int maxSwing = 0;
+        for (int d = 1; d < DAYS; d++) {
+            int curr = 0;
+            for (int c = 0; c < COMMS; c++) {
+                curr += profits[start + d][c];
+            }
+            int diff = Math.abs(curr - prev);
+            if (diff > maxSwing) maxSwing = diff;
+            prev = curr;
+        }
+        return maxSwing;
     }
 
+
     public static String compareTwoCommodities(String c1, String c2) {
-        return "DUMMY is better by 1234";
+        int i1 = getCommodityIndex(c1);
+        int i2 = getCommodityIndex(c2);
+        if (i1 == -1 || i2 == -1) return "INVALID_COMMODITY";
+
+        int sum1 = 0, sum2 = 0;
+        for (int g = 0; g < MONTHS * DAYS; g++) {
+            sum1 += profits[g][i1];
+            sum2 += profits[g][i2];
+        }
+
+        if (sum1 > sum2) return c1 + " is better by " + (sum1 - sum2);
+        if (sum2 > sum1) return c2 + " is better by " + (sum2 - sum1);
+        return "Equal";
     }
 
     public static String bestWeekOfMonth(int month) {
-        return "DUMMY";
+        if (month < 0 || month >= MONTHS) return "INVALID_MONTH";
+
+        int bestWeek = 1;
+        int maxProfit = Integer.MIN_VALUE;
+
+        int start = month * DAYS;
+        for (int w = 0; w < 4; w++) {
+            int sum = 0;
+            for (int d = w * 7; d < w * 7 + 7; d++) {
+                for (int c = 0; c < COMMS; c++) {
+                    sum += profits[start + d][c];
+                }
+            }
+            if (sum > maxProfit) {
+                maxProfit = sum;
+                bestWeek = w + 1;
+            }
+        }
+        return "Week " + bestWeek;
     }
 
     // ======== HELPER ========
