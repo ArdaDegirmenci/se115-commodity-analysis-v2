@@ -1,4 +1,3 @@
-// Main.java — Students version
 import java.io.*;
 import java.util.*;
 
@@ -9,10 +8,33 @@ public class Main {
     static String[] commodities = {"Gold", "Oil", "Silver", "Wheat", "Copper"};
     static String[] months = {"January","February","March","April","May","June",
                               "July","August","September","October","November","December"};
-    
+
+    static int[][] profits = new int[MONTHS * DAYS][COMMS];
+
 
     // ======== REQUIRED METHOD LOAD DATA (Students fill this) ========
     public static void loadData() {
+
+        for (int m = 0; m < MONTHS; m++) {
+            try {
+                File file = new File("Data_Files/" + months[m] + ".txt");
+                Scanner sc = new Scanner(file);
+
+                while (sc.hasNextLine()) {
+                    String[] p = sc.nextLine().split(",");
+
+                    int day = Integer.parseInt(p[0]); // 1-28
+                    String comm = p[1];
+                    int profit = Integer.parseInt(p[2]);
+
+                    int cIndex = getCommodityIndex(comm);
+                    if (cIndex != -1 && day >= 1 && day <= DAYS) {
+                        int globalDay = m * DAYS + (day - 1);
+                        profits[globalDay][cIndex] = profit;
+                    }
+                }
+                sc.close();
+            } catch (Exception e)
     }
 
     // ======== 10 REQUIRED METHODS (Students fill these) ========
